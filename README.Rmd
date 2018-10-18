@@ -1,0 +1,93 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# gvmisc
+
+The goal of gvmisc is to ...
+
+## Installation
+
+You can install the released version of gvmisc from [CRAN](https://CRAN.R-project.org) with:
+
+```{r, eval=F}
+devtools::install_github("araezopsis/gvmisc")
+```
+
+## Example
+
+### Package loading
+```{r load package}
+library(gvmisc)
+```
+
+### Reading xlsx file exported from GeneVestigator
+```{r read xlsx}
+test_file <- 
+  system.file(
+    "extdata", "gv_test.xlsx", 
+    package = "gvmisc"
+  )
+
+test_df <- read_gv_xlsx(test_file)
+dplyr::glimpse(test_df)
+```
+
+### Gene meta information
+```{r extract meta}
+meta_df <- test_df %>% gv2meta_df()
+dplyr::glimpse(meta_df)
+```
+
+### Data meta information
+```{r extract info}
+info_df <- test_df %>% gv2info_df()
+dplyr::glimpse(info_df)
+```
+
+### Data
+```{r extract data}
+data_df <- test_df %>% gv2data_df()
+dplyr::glimpse(data_df)
+```
+
+### Getting tidy data.frame
+```{r tidy df}
+tidy_data <- test_df %>% gv2tidy_data_df()
+tidy_data
+```
+
+### Tidy data with data meta info
+```{r tidy df with info}
+tidy_data2 <-
+  dplyr::left_join(
+    info_df,
+    tidy_data,
+    by = "id"
+  )
+dplyr::glimpse(tidy_data2)
+```
+
+### Tidy data with data meta info
+```{r tidy df with gene meta}
+col_info <- meta2nona_col(meta_df)
+col_info
+
+dplyr::left_join(
+  meta_df %>% dplyr::distinct(),
+  tidy_data2,
+  by = col_info$col_name
+) %>% 
+  dplyr::glimpse()
+```
+
