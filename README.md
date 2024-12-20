@@ -11,7 +11,7 @@ Installation
 You can install the released version of gvmisc from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-devtools::install_github("araezopsis/gvmisc")
+devtools::install_github("t-arae/gvmisc")
 ```
 
 Example
